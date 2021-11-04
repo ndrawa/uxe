@@ -1,15 +1,23 @@
 import React, { Component } from 'react';
-// import logo from '../logo.png';
 import Web3 from 'web3';
 import './App.css';
 import Tracking from '../abis/Tracking.json'
-import Navbar from './Navbar';
+import Header from './Header';
+// import Navbar from './Navbar';
+// import Footer from './Footer';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from 'react-router-dom';
+
 import User from './Admin/User';
 import Vaccine from './Admin/Vaccine';
 import Producer from './Users/Producer';
 import Distributor from './Users/Distributor';
 import Doctor from './Users/Doctor';
 import Patient from './Users/Patient';
+import Alur from './Users/Tracking';
 
 class App extends Component {
 
@@ -43,11 +51,14 @@ class App extends Component {
       this.setState({tracking})
       // const user = await tracking.methods.users(1).call()
       const user = await tracking.methods.users(accounts[0]).call()
-      // console.log(user)
+      console.log(user)
       this.setState({ role: user.role});
+      this.setState({username : user.name});
 
-
-      for (var index = 0; index < 9; index++) {
+      const _Vaccine = await tracking.methods._Vaccine().call()
+      // console.log(_Vaccine.toString())
+      this.setState({ _Vaccine })
+      for (var index = 0; index < _Vaccine; index++) {
         const vaccine = await tracking.methods.vaccines(index).call()
         this.setState({
           vaccines: [...this.state.vaccines, vaccine]
@@ -55,6 +66,19 @@ class App extends Component {
       }
       this.setState({loading: false})
       // console.log(this.state.vaccines)
+
+      const _Transaction = await tracking.methods._Transaction().call()
+      // console.log(_Transaction.toString())
+      this.setState({_Transaction})
+      for (var i = 1; i <= _Transaction; i++) {
+        const transaction = await tracking.methods.transactions(i).call()
+        this.setState({
+          transactions: [...this.state.transactions, transaction]
+        })
+      }
+      this.setState({loading: false})
+      console.log(this.state.transactions)
+
     } else {
       window.alert("Tracking contract not deployed to detected network")
     }
@@ -67,10 +91,12 @@ class App extends Component {
     this.state = {
       account: '',
       role: '',
+      username: null,
       _Transaction: 0,
+      _Vaccine: 0,
       _numberTransaction: 0,
       users: [],
-      transaction: [],
+      transactions: [],
       vaccines: [],
       loading: true
 
@@ -102,7 +128,7 @@ class App extends Component {
     this.setState({loading: true})
     this.state.tracking.methods.startTransaction(_numberVaccine, _amountVaccine).send({ from: this.state.account})
     .once('receipt', (receipt) => {
-      this.setState({loading: false})
+      this.setState({loading: true})
     })
   }
 
@@ -125,29 +151,110 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Navbar account={this.state.account}/>
-        <div className="container-fluid mt-5">
-          <div className="row">
-            <main role="main" className="col-lg-12 d-flex text-center">
-              {this.state.loading
-                ? <div id="loader" className="text-center">
-                    <p className="text-center">
-                      Loading...
-                      {/* {window.location.reload()} */}
-                    </p>
-                  </div>
-                  // : <User addUser={this.addUser}/>
-                  // : <Vaccine 
-                  // vaccines={this.state.vaccines}
-                  // addVaccine={this.addVaccine}/>
-                  : <Producer startTransaction={this.startTransaction}/>
-                  // : <Distributor goTransfer={this.goTransfer}/>
-                  // : <Doctor goTransfer={this.goTransfer}/>
-                  // : <Patient finishTransaction={this.finishTransaction}/>
-              }
-            </main>
-          </div>
-        </div>
+        <Router>
+          <Header name={this.state.username}/> 
+            <div className="container-fluid mt-4">
+              <div className="row">
+                <main role="main" className="col-lg-12 d-flex text-center">
+                  <Switch>
+                    <Route exact path='/'>
+
+                      <h1>Home {this.state.username}</h1>
+                      
+                    </Route>
+                    <Route exact path='/user'>
+                      {this.state.loading
+                        ? <div id="loader" className="text-center">
+                            <p className="text-center">
+                              Loading...
+                            </p>
+                          </div>
+                          : <User addUser={this.addUser}/>
+                      }
+                    </Route>
+                    <Route exact path='/vaccine'>
+                      {this.state.loading
+                        ? <div id="loader" className="text-center">
+                            <p className="text-center">
+                              Loading...
+                            </p>
+                          </div>
+                          : <Vaccine 
+                              vaccines={this.state.vaccines}
+                              addVaccine={this.addVaccine}
+                            />
+                      }
+                    </Route>
+                    <Route exact path='/producer'>
+                      {this.state.loading
+                        ? <div id="loader" className="text-center">
+                            <p className="text-center">
+                              Loading...
+                            </p>
+                          </div>
+                          : <Producer
+                            transaction={this.state.transactions}
+                            startTransaction={this.startTransaction}
+                          />
+                      }
+                    </Route>
+                    <Route exact path='/distributor'>
+                      {this.state.loading
+                        ? <div id="loader" className="text-center">
+                            <p className="text-center">
+                              Loading...
+                            </p>
+                          </div>
+                          : <Distributor 
+                              transaction={this.state.transactions}
+                              goTransfer={this.goTransfer}
+                            />
+                      }
+                    </Route>
+                    <Route exact path='/doctor'>
+                      {this.state.loading
+                        ? <div id="loader" className="text-center">
+                            <p className="text-center">
+                              Loading...
+                            </p>
+                          </div>
+                          : <Doctor
+                              transaction={this.state.transactions}
+                              goTransfer={this.goTransfer}
+                            />
+                      }
+                    </Route>
+                    <Route exact path='/patient'>
+                      {this.state.loading
+                        ? <div id="loader" className="text-center">
+                            <p className="text-center">
+                              Loading...
+                            </p>
+                          </div>
+                          : <Patient
+                              transaction={this.state.transactions}
+                              finishTransaction={this.finishTransaction}
+                            />
+                      }
+                    </Route>
+                    <Route exact path='/tracking'>
+                      {this.state.loading
+                        ? <div id="loader" className="text-center">
+                            <p className="text-center">
+                              Loading...
+                            </p>
+                          </div>
+                          : <Alur 
+                              transaction={this.state.transactions}
+                            />
+                      }
+                    </Route>
+                  </Switch>
+                </main>
+              </div>
+            </div>
+          {/* <Footer/> */}
+        </Router>
       </div>
     );
   }

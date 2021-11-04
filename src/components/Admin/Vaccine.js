@@ -13,7 +13,7 @@ class Vaccine extends Component {
           const _immune = this._immune.value
           this.props.addVaccine(_number,_name,_immune)
         }}>
-          <div className="form-group mr-sm-2">
+          <div className="form-group mr-sm-2 mt-4">
             <input
             id="vaccineNumber"
             type="text"
@@ -23,7 +23,7 @@ class Vaccine extends Component {
             required/>
           </div>
 
-          <div className="form-group mr-sm-2">
+          <div className="form-group mr-sm-2 mt-3">
             <input
             id="vaccineName"
             type="text"
@@ -33,7 +33,7 @@ class Vaccine extends Component {
             required/>
           </div>
 
-          <div className="form-group mr-sm-2">
+          <div className="form-group mr-sm-2 mt-3">
             <input
             id="vaccineDescription"
             ref={(input) => {this._immune = input}}
@@ -42,7 +42,7 @@ class Vaccine extends Component {
             placeholder="Description"
             required/>
           </div>
-          <button type="submit" className="btn btn-primary">Add Vaccine</button>
+          <button type="submit" className="btn btn-primary mt-4">Add Vaccine</button>
         </form>
         <p>&nbsp;</p>
         <h2>Vaccines</h2>

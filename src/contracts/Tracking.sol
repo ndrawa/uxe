@@ -1,9 +1,10 @@
-pragma solidity >=0.5.0 <0.9.0;
+pragma solidity >=0.4.21 <0.6.0;
 
 contract Tracking {
     // uint _numberBankTransaction = 0;
-    uint _Transaction = 0;
-    uint _numberTransaction = 0;
+    uint public _Transaction = 0;
+    uint public _numberTransaction = 0;
+    uint public _Vaccine = 0;
     address none = 0x0000000000000000000000000000000000000000;
     
     enum roles {
@@ -42,22 +43,26 @@ contract Tracking {
     
     mapping(uint256 => Transaction) public transactions;
     
-    Vaccine[] public vaccines;
+    mapping(uint256 => Vaccine) public vaccines;
     
     constructor() public {
         admin = msg.sender;
         users[admin].name = 'Admin';
         users[admin].role = roles.Admin;
-        vaccines.push(Vaccine(1,"CoronaVac","Corona"));
-        vaccines.push(Vaccine(2,"MR","Campak"));
-        vaccines.push(Vaccine(3,"Varivax","Verisela"));
+        vaccines[_Vaccine] = Vaccine(1,"MR","Campak");
+        _Vaccine++;
+        vaccines[_Vaccine] = Vaccine(2,"Varivax","Verisela");
+        _Vaccine++;
+        vaccines[_Vaccine] = Vaccine(3,"CoronaVac","Corona");
+        _Vaccine++;
     }
     
     function addVaccine(uint _number, string memory _name, string memory _immune) public {
         require(msg.sender == admin,
             "Only admin can give access rights."
         );
-        vaccines.push(Vaccine(_number,_name,_immune));
+        vaccines[_Vaccine] = Vaccine(_number,_name,_immune);
+        _Vaccine++;
     }
     
     function addUser(address _user,string memory _userName, uint _userRole) public {

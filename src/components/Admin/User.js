@@ -13,7 +13,7 @@ class User extends Component {
           const _userRole = this._userRole.value
           this.props.addUser(_user,_userName,_userRole)
         }}>
-          <div className="form-group mr-sm-2">
+          <div className="form-group mr-sm-2 mt-4">
             <input
             id="userAddress"
             type="password"
@@ -23,7 +23,7 @@ class User extends Component {
             required/>
           </div>
 
-          <div className="form-group mr-sm-2">
+          <div className="form-group mr-sm-2 mt-3">
             <input
             id="userName"
             type="text"
@@ -33,7 +33,7 @@ class User extends Component {
             required/>
           </div>
 
-          <div className="form-group mr-sm-2">
+          <div className="form-group mr-sm-2 mt-3">
             <input
             id="userRole"
             ref={(input) => {this._userRole = input}}
@@ -42,7 +42,7 @@ class User extends Component {
             placeholder="uint"
             required/>
           </div>
-          <button type="submit" className="btn btn-primary">Add User</button>
+          <button type="submit" className="btn btn-primary mt-4">Add User</button>
         </form>
         <p>&nbsp;</p>
       </div>

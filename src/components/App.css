@@ -2,3 +2,11 @@
 div {
     margin: auto;
 }
+
+.qr-image-wrapper section { 
+    border-radius: 16px;                   
+}
+
+.qr-image-wrapper section div {
+    box-shadow: unset !important;
+}

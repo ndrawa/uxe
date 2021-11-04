@@ -1,48 +1,67 @@
 import React, { Component } from 'react';
+import QrReader from 'react-qr-reader';
 
 class Doctor extends Component {
+  state = {
+    result: 'No result'
+  }
+
+  handleScan = data => {
+    if (data) {
+      this.setState({
+        result: data
+      })
+    }
+  }
+
+  handleError = err => {
+    console.error(err)
+  }
 
   render() {
     return (
       <div id="content">
-        <h1>Add User</h1>
+        <h1>&ensp;&ensp;Scan Qr Code Doctor&ensp;&ensp;</h1>
         <form onSubmit={(event) => {
           event.preventDefault()
-          const _user = this._user.value
-          const _userName = this._userName.value
-          const _userRole = this._userRole.value
-          this.props.addUser(_user,_userName,_userRole)
+          const _numberVaccine = this._numberVaccine.value
+          const _amountVaccine = this._amountVaccine.value
+          this.props.goTransfer(_numberVaccine,_amountVaccine)
         }}>
-          <div className="form-group mr-sm-2">
-            <input
-            id="userAddress"
-            type="password"
-            ref={(input) => {this._user = input}}
-            className="form-control"
-            placeholder="address"
-            required/>
+          <div>
+            <QrReader className="qr-image-wrapper"
+              delay={300}
+              onError={this.handleError}
+              onScan={this.handleScan}
+              style={{ width: '100%' }}
+            />
+            {/* <p>{this.state.result}</p> */}
           </div>
 
-          <div className="form-group mr-sm-2">
+          <div className="form-group mr-sm-2 mt-4">
             <input
-            id="userName"
+            id="_numberVaccine"
             type="text"
-            ref={(input) => {this._userName = input}}
+            ref={(input) => {this._numberVaccine = input}}
             className="form-control"
-            placeholder="string"
+            value={this.state.result}
+            disabled
             required/>
           </div>
 
-          <div className="form-group mr-sm-2">
+          <div className="form-group mr-sm-2 mt-3">
             <input
-            id="userRole"
-            ref={(input) => {this._userRole = input}}
-            type="number"
+            id="_amountVaccine"
+            type="text"
+            ref={(input) => {this._amountVaccine = input}}
             className="form-control"
-            placeholder="uint"
-            required/>
+            value={this.state.result}
+            disabled
+            required
+            hidden/>
           </div>
-          <button type="submit" className="btn btn-primary">Add User</button>
+          <button type="submit" className="btn btn-primary mt-4">Accept Doctor</button>
+          
         </form>
         <p>&nbsp;</p>
       </div>
