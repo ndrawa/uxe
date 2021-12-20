@@ -4,7 +4,7 @@ import { faBars } from '@fortawesome/free-solid-svg-icons'
 import { useTransition, animated } from 'react-spring'
 import NavigationMenu from './NavigationMenu'
 
-function Navigation(){
+function Navigation(props){
     const [showMenu, setShowMenu] = useState(false)
     const maskTransitions = useTransition(showMenu, {
         from: { position: 'absolute', opacity: 0 },
@@ -50,6 +50,7 @@ function Navigation(){
                     >
                         <NavigationMenu
                             closeMenu={() => setShowMenu(false)}
+                            role = {props.role}
                         />
                     </animated.div>
                 )

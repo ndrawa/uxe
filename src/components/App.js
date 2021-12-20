@@ -41,6 +41,7 @@ class App extends Component {
   async loadBlockchainData() {
     const web3 = window.web3;
     const accounts = await web3.eth.getAccounts();
+    // console.log(accounts)
     this.setState({ account: accounts[0]});
     const networkId = await web3.eth.net.getId()
     const networkData = Tracking.networks[networkId]
@@ -51,7 +52,11 @@ class App extends Component {
       this.setState({tracking})
       // const user = await tracking.methods.users(1).call()
       const user = await tracking.methods.users(accounts[0]).call()
-      console.log(user)
+      // console.log(await tracking.methods.users('0x5122872F957dE6980F75Ffe063DeCF56916A90f5').call())
+      // await this.getUser('0x5122872F957dE6980F75Ffe063DeCF56916A90f5').then((response) => {
+      //   console.log(this.state);
+      // })
+      
       this.setState({ role: user.role});
       this.setState({username : user.name});
 
@@ -96,6 +101,7 @@ class App extends Component {
       _Vaccine: 0,
       _numberTransaction: 0,
       users: [],
+      user: '',
       transactions: [],
       vaccines: [],
       loading: true
@@ -106,6 +112,16 @@ class App extends Component {
     this.startTransaction = this.startTransaction.bind(this)
     this.goTransfer = this.goTransfer.bind(this)
     this.finishTransaction = this.finishTransaction.bind(this)
+    this.getUser = this.getUser.bind(this)
+  }
+
+  async getUser(_address) {
+    this.state.tracking.methods.users(_address).call().then((user) => {
+      return user.name+'hello'
+      // console.log(this.state.user+'hello');
+    }).catch((error) => {
+      return error
+    });
   }
 
   addUser(_user, _userName, _userRole) {
@@ -152,7 +168,10 @@ class App extends Component {
     return (
       <div>
         <Router>
-          <Header name={this.state.username}/> 
+          <Header 
+            name={this.state.username}
+            role={this.state.role}
+          /> 
             <div className="container-fluid mt-4">
               <div className="row">
                 <main role="main" className="col-lg-12 d-flex text-center">
@@ -234,6 +253,7 @@ class App extends Component {
                           : <Patient
                               transaction={this.state.transactions}
                               finishTransaction={this.finishTransaction}
+                              getUser={this.getUser}
                             />
                       }
                     </Route>
