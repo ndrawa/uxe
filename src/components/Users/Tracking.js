@@ -42,9 +42,12 @@ class Tracking extends Component {
           {/* <th scope="row">{transaction.numberTransaction.toString()}</th> */}
           {/* <td>{window.web3.utils.formWei(vaccine.number.toString(), 'Ether')}</td> */}
           {/* <td>{data.numberVaccine.toString()}</td> */}
-          {/* <td>{transaction.amountVaccine.toString()}</td> */}
           <td>{data.receiver}</td>
           <td>{data.sender}</td>
+          <td>{data.rolesender}</td>
+          <td>{data.amountVaccine.toString()}</td>
+
+          {/* <td>{this.props.getUser('0x5122872F957dE6980F75Ffe063DeCF56916A90f5')}</td> */}
         </tr>
         
       )
@@ -52,6 +55,10 @@ class Tracking extends Component {
 
     return (
       <div>
+        <nav>
+        <h1>Tracking</h1>
+        </nav>
+        <p>&nbsp;</p>
         {(() => {
             if (this.state.result === 'No result') {
               return (
@@ -62,12 +69,12 @@ class Tracking extends Component {
                     onScan={this.handleScan}
                     style={{ width: '300px' }}
                   />
+                  <p>&nbsp;</p>
                   {/* <p>{this.state.result}</p> */}
                 </div>
               )
             }
           })()}
-        <h2>Tracking</h2>
         <table className="table">
           <thead>
             <tr>
@@ -75,9 +82,10 @@ class Tracking extends Component {
               <th scope="col">Time</th>
               {/* <th scope="col">No. Transaction</th> */}
               {/* <th scope="col">No. Batch</th> */}
-              {/* <th scope="col">Total</th> */}
               <th scope="col">Receiver</th>
               <th scope="col">Sender</th>
+              <th scope="col">Role</th>
+              <th scope="col">Total</th>
             </tr>
           </thead>
           <tbody id="trackingList">

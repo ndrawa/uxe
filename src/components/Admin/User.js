@@ -19,7 +19,7 @@ class User extends Component {
             type="password"
             ref={(input) => {this._user = input}}
             className="form-control"
-            placeholder="address"
+            placeholder="Address"
             required/>
           </div>
 
@@ -29,18 +29,24 @@ class User extends Component {
             type="text"
             ref={(input) => {this._userName = input}}
             className="form-control"
-            placeholder="string"
+            placeholder="Name"
             required/>
           </div>
 
           <div className="form-group mr-sm-2 mt-3">
-            <input
+            {/* <input
             id="userRole"
             ref={(input) => {this._userRole = input}}
             type="number"
             className="form-control"
             placeholder="uint"
-            required/>
+            required/> */}
+            <select name="selectList" id="userRole" ref={(input) => {this._userRole = input}}>
+              <option value="1">Producer</option>
+              <option value="2">Distributor</option>
+              <option value="3">Doctor</option>
+              <option value="4">Patient</option>
+            </select>
           </div>
           <button type="submit" className="btn btn-primary mt-4">Add User</button>
         </form>

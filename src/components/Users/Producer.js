@@ -48,13 +48,15 @@ class Producer extends Component {
           </div>
           <button type="submit" className="btn btn-primary mt-4">Start</button>
         </form>
-        <p>&nbsp;</p>
-        {this.state.imageUlr ? 
-        ( 
-        <a href={this.state.imageUlr} download>
-          <img src={this.state.imageUlr} alt="img"/>
-        </a>
-        ) : null}
+        <br></br>
+        <div style={{display: 'flex', justifyContent: 'center'}}>
+          {this.state.imageUlr ? 
+          ( 
+          <a href={this.state.imageUlr} download>
+            <img src={this.state.imageUlr} alt="img"/>
+          </a>
+          ) : null}
+        </div>
       </div>
     );
   }

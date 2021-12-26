@@ -21,7 +21,7 @@ class Doctor extends Component {
   render() {
     return (
       <div id="content">
-        <h1>&ensp;&ensp;Scan Qr Code Doctor&ensp;&ensp;</h1>
+        <h1>&ensp;&ensp;Scan Qr Code Vaccintor&ensp;&ensp;</h1>
         <form onSubmit={(event) => {
           event.preventDefault()
           const _numberVaccine = this._numberVaccine.value
@@ -49,18 +49,27 @@ class Doctor extends Component {
             required/>
           </div>
 
-          <div className="form-group mr-sm-2 mt-3">
-            <input
-            id="_amountVaccine"
-            type="text"
-            ref={(input) => {this._amountVaccine = input}}
-            className="form-control"
-            value={this.state.result}
-            disabled
-            required
-            hidden/>
-          </div>
-          <button type="submit" className="btn btn-primary mt-4">Accept Doctor</button>
+          {(() => {
+            if (this.state.result !== 'No result') {
+              return (
+                <div className="form-group mr-sm-2 mt-3">
+                  <input
+                  id="_amountVaccine"
+                  type="text"
+                  ref={(input) => {this._amountVaccine = input}}
+                  className="form-control"
+                  placeholder="Amount Vaccine"
+                  // value={this.state.result}
+                  // disabled
+                  required
+                  // hidden
+                  />
+                </div>
+              )
+            }
+          })()}
+          
+          <button type="submit" className="btn btn-primary mt-4">Accept Vaccintor</button>
           
         </form>
         <p>&nbsp;</p>

@@ -3,9 +3,11 @@ import { Link } from 'react-router-dom';
 
 function NavigationMenu(props){
     return (
-        <div>
+        <div className="NavMenu">
             <div className='font-bold py-3'>
-                This is Menu
+                <h1>
+                    This is Menu
+                </h1>
             </div>
             <ul>
                 <li>
@@ -14,7 +16,7 @@ function NavigationMenu(props){
                         className='text-blue-500 py-3 border-t border-b block'
                         onClick={props.closeMenu}
                     >
-                        Home
+                        <h1>Home</h1>
                     </Link>
                 </li>
                 {(() => {
@@ -27,10 +29,10 @@ function NavigationMenu(props){
                                         className='text-blue-500 py-3 border-b block'
                                         onClick={props.closeMenu}
                                     >
-                                        Add Users
+                                        <h1>Add Users</h1>
                                     </Link>
                                 </li>
-                                <li>
+                                {/* <li>
                                     <Link 
                                         to='/vaccine' 
                                         className='text-blue-500 py-3 border-b block'
@@ -38,7 +40,7 @@ function NavigationMenu(props){
                                     >
                                         Add Vaccines
                                     </Link>
-                                </li>
+                                </li> */}
                             </div>
                         )
                     } else if (props.role === 1) {
@@ -50,7 +52,17 @@ function NavigationMenu(props){
                                         className='text-blue-500 py-3 border-b block'
                                         onClick={props.closeMenu}
                                     >
-                                        Start Transaction
+                                        <h1>Start Transaction</h1>
+                                    </Link>
+                                </li>
+
+                                <li>
+                                    <Link 
+                                        to='/tracking' 
+                                        className='text-blue-500 py-3 border-b block'
+                                        onClick={props.closeMenu}
+                                    >
+                                        <h1>Tracking</h1>
                                     </Link>
                                 </li>
                             </div>
@@ -64,7 +76,17 @@ function NavigationMenu(props){
                                         className='text-blue-500 py-3 border-b block'
                                         onClick={props.closeMenu}
                                     >
-                                        Distribute
+                                        <h1>Distribute</h1>
+                                    </Link>
+                                </li>
+
+                                <li>
+                                    <Link 
+                                        to='/tracking' 
+                                        className='text-blue-500 py-3 border-b block'
+                                        onClick={props.closeMenu}
+                                    >
+                                        <h1>Tracking</h1>
                                     </Link>
                                 </li>
                             </div>
@@ -78,7 +100,17 @@ function NavigationMenu(props){
                                         className='text-blue-500 py-3 border-b block'
                                         onClick={props.closeMenu}
                                     >
-                                        Vaccinate
+                                        <h1>Vaccinate</h1>
+                                    </Link>
+                                </li>
+                                
+                                <li>
+                                    <Link 
+                                        to='/tracking' 
+                                        className='text-blue-500 py-3 border-b block'
+                                        onClick={props.closeMenu}
+                                    >
+                                        <h1>Tracking</h1>
                                     </Link>
                                 </li>
                             </div>
@@ -92,22 +124,13 @@ function NavigationMenu(props){
                                         className='text-blue-500 py-3 border-b block'
                                         onClick={props.closeMenu}
                                     >
-                                        Receive Vaccine
+                                        <h1>Receive Vaccine</h1>
                                     </Link>
                                 </li>
                             </div>
                         )
                     }
                 })()}
-                <li>
-                    <Link 
-                        to='/tracking' 
-                        className='text-blue-500 py-3 border-b block'
-                        onClick={props.closeMenu}
-                    >
-                        Tracking
-                    </Link>
-                </li>
             </ul>  
         </div>
     )

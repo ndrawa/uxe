@@ -45,6 +45,7 @@ class Patient extends Component {
           {/* <td>{transaction.amountVaccine.toString()}</td> */}
           {/* <td>{this.props.getUser(data.sender)}</td> */}
           <td>{data.sender}</td>
+          <td>{data.rolesender}</td>
           {/* <td>{data.receiver}</td> */}
         </tr>
         
@@ -53,17 +54,38 @@ class Patient extends Component {
 
     return (
       <div id="content">
-        <h1>&ensp;&emsp;&emsp;Scan Qr Code&emsp;&emsp;&ensp;</h1>
         <form onSubmit={(event) => {
           event.preventDefault()
           const _numberVaccine = this._numberVaccine.value
           const _amountVaccine = this._amountVaccine.value
           this.props.finishTransaction(_numberVaccine,_amountVaccine)
         }}>
+          <div className="form-group mr-sm-2 mt-4">
+            <input
+            id="_numberVaccine"
+            type="text"
+            ref={(input) => {this._numberVaccine = input}}
+            className="form-control"
+            value={this.state.result}
+            disabled
+            required/>
+          </div>
+          <div className="form-group mr-sm-2 mt-3">
+            <input
+            id="_amountVaccine"
+            type="text"
+            ref={(input) => {this._amountVaccine = input}}
+            className="form-control"
+            value={1}
+            disabled
+            required
+            hidden/>
+          </div>
           {(() => {
             if (this.state.result === 'No result') {
               return (
                 <div>
+                  <h1>&ensp;&emsp;&emsp;Scan Qr Code&emsp;&emsp;&ensp;</h1>
                   <QrReader className="qr-image-wrapper"
                     delay={300}
                     onError={this.handleError}
@@ -76,38 +98,20 @@ class Patient extends Component {
             }
           })()}
           
-
-            <div className="form-group mr-sm-2 mt-4">
-              <input
-              id="_numberVaccine"
-              type="text"
-              ref={(input) => {this._numberVaccine = input}}
-              className="form-control"
-              value={this.state.result}
-              disabled
-              required/>
-            </div>
-
-            <div className="form-group mr-sm-2 mt-3">
-              <input
-              id="_amountVaccine"
-              type="text"
-              ref={(input) => {this._amountVaccine = input}}
-              className="form-control"
-              value={this.state.result}
-              disabled
-              required
-              hidden/>
-            </div>
-          
-          <button type="submit" className="btn btn-primary mt-4">Accept Vaccine</button>
+          {(() => {
+            if (this.state.result !== 'No result') {
+              return (
+                <div>
+                  <p>&nbsp;</p>
+                  <Table 
+                    items={items}
+                  /> 
+                  <button type="submit" className="btn btn-primary mt-4">Accept Vaccine</button>
+                </div>
+              )
+            }
+          })()}
         </form>
-          
-        <p>&nbsp;</p>
-        <Table 
-          items={items}
-        /> 
-        
       </div>
     );
   }

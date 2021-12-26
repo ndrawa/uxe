@@ -48,18 +48,26 @@ class Distributor extends Component {
             disabled
             required/>
           </div>
-
-          <div className="form-group mr-sm-2 mt-3">
-            <input
-            id="_amountVaccine"
-            type="text"
-            ref={(input) => {this._amountVaccine = input}}
-            className="form-control"
-            value={this.state.result}
-            disabled
-            required
-            hidden/>
-          </div>
+          
+          {(() => {
+            if (this.state.result !== 'No result') {
+              return (
+                <div className="form-group mr-sm-2 mt-3">
+                  <input
+                  id="_amountVaccine"
+                  type="text"
+                  ref={(input) => {this._amountVaccine = input}}
+                  className="form-control"
+                  placeholder="Amount Vaccine"
+                  // value={this.state.result}
+                  // disabled
+                  required
+                  // hidden
+                  />
+                </div>
+              )
+            }
+          })()}
           <button type="submit" className="btn btn-primary mt-4">Accept Distributor</button>
           
         </form>

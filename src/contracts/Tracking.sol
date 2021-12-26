@@ -5,7 +5,7 @@ contract Tracking {
     uint public _Transaction = 0;
     uint public _numberTransaction = 0;
     uint public _Vaccine = 0;
-    address none = 0x0000000000000000000000000000000000000000;
+    string none = '-';
     
     enum roles {
         Admin,
@@ -31,8 +31,10 @@ contract Tracking {
         uint numberTransaction;
         uint numberVaccine;
         uint amountVaccine;
-        address sender;
-        address receiver;
+        string sender;
+        address addrsender;
+        string rolesender;
+        string receiver;
         bool start;
         bool end;
     }
@@ -89,21 +91,31 @@ contract Tracking {
         require(sender.role == roles.Producer , "Do not have the right to initiate a transaction");
         _Transaction ++;
         _numberTransaction ++;
-        transactions[_Transaction] = Transaction(block.timestamp,_numberTransaction,_numberVaccine,_amountVaccine,msg.sender,none,true,false);
+        transactions[_Transaction] = Transaction(block.timestamp,_numberTransaction,_numberVaccine,_amountVaccine,sender.name,msg.sender,'Producer',none,true,false);
     }
     
     function goTransfer(uint _numberVaccine, uint _amountVaccine) public {
         User storage sender = users[msg.sender];
         require(sender.role == roles.Distributor || sender.role == roles.Docter, "Do not have the right to initiate a transaction");
         _Transaction ++;
-        transactions[_Transaction] = Transaction(block.timestamp,_numberTransaction,_numberVaccine,_amountVaccine,msg.sender,msg.sender,true,false);
+        string memory userRole;
+        if(sender.role == roles.Distributor) {
+            userRole = 'Distributor';
+        } else {
+            userRole = 'Vaccinator';
+        }
+        transactions[_Transaction] = Transaction(block.timestamp,_numberTransaction,_numberVaccine,_amountVaccine,sender.name,msg.sender,userRole,sender.name,true,false);
     }
     
     function finishTransaction(uint _numberVaccine, uint _amountVaccine) public {
         User storage sender = users[msg.sender];
         require(sender.role == roles.Patien , "Do not have the right to initiate a transaction");
         _Transaction ++;
-        transactions[_Transaction] = Transaction(block.timestamp,_numberTransaction,_numberVaccine,_amountVaccine,none,msg.sender,true,true);
+        transactions[_Transaction] = Transaction(block.timestamp,_numberTransaction,_numberVaccine,_amountVaccine,none,msg.sender,'Patien',sender.name,true,true);
+    }
+
+    function getName(address _address) public view returns(string memory) {
+        return users[_address].name;
     }
     
 }

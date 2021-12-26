@@ -3,7 +3,7 @@ import React from 'react';
 function Table(props) {
     return (
         <div>
-        <h2>Tracking</h2>
+        <h1>Tracking</h1>
         <table className="table">
             <thead>
                 <tr>

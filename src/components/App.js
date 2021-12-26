@@ -41,7 +41,6 @@ class App extends Component {
   async loadBlockchainData() {
     const web3 = window.web3;
     const accounts = await web3.eth.getAccounts();
-    // console.log(accounts)
     this.setState({ account: accounts[0]});
     const networkId = await web3.eth.net.getId()
     const networkData = Tracking.networks[networkId]
@@ -49,15 +48,15 @@ class App extends Component {
     if (networkData) {
       const tracking = web3.eth.Contract(Tracking.abi, networkData.address)
       // console.log(tracking)
-      this.setState({tracking})
-      // const user = await tracking.methods.users(1).call()
+      this.setState({tracking: tracking})
+      
       const user = await tracking.methods.users(accounts[0]).call()
       // console.log(await tracking.methods.users('0x5122872F957dE6980F75Ffe063DeCF56916A90f5').call())
       // await this.getUser('0x5122872F957dE6980F75Ffe063DeCF56916A90f5').then((response) => {
       //   console.log(this.state);
       // })
       
-      this.setState({ role: user.role});
+      this.setState({role: user.role});
       this.setState({username : user.name});
 
       const _Vaccine = await tracking.methods._Vaccine().call()
@@ -94,6 +93,7 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      tracking: '',
       account: '',
       role: '',
       username: null,
@@ -112,21 +112,22 @@ class App extends Component {
     this.startTransaction = this.startTransaction.bind(this)
     this.goTransfer = this.goTransfer.bind(this)
     this.finishTransaction = this.finishTransaction.bind(this)
-    this.getUser = this.getUser.bind(this)
+    // this.getUser = this.getUser.bind(this)
+    // this.getName = this.getName.bind(this)
   }
 
-  async getUser(_address) {
-    this.state.tracking.methods.users(_address).call().then((user) => {
-      return user.name+'hello'
-      // console.log(this.state.user+'hello');
-    }).catch((error) => {
-      return error
-    });
-  }
+  // getUser(_address) {
+  //   this.state.tracking.methods.users(_address).call().then((user) => {
+  //     return user.name+'hello'
+  //     // console.log(this.state.user+'hello');
+  //   }).catch((error) => {
+  //     return error
+  //   });
+  // }
 
   addUser(_user, _userName, _userRole) {
     this.setState({loading: true})
-    this.state.tracking.methods.addUser(_user, _userName, _userRole).send({ from: this.state.account})
+    this.state.tracking.methods.addUser(_user, _userName, _userRole).send({from: this.state.account})
     .once('receipt', (receipt) => {
       this.setState({loading: false})
     })
@@ -134,7 +135,7 @@ class App extends Component {
 
   addVaccine(_number, _name, _immune) {
     this.setState({loading: true})
-    this.state.tracking.methods.addVaccine(_number, _name, _immune).send({ from: this.state.account})
+    this.state.tracking.methods.addVaccine(_number, _name, _immune).send({from: this.state.account})
     .once('receipt', (receipt) => {
       this.setState({loading: false})
     })
@@ -142,7 +143,7 @@ class App extends Component {
 
   startTransaction(_numberVaccine, _amountVaccine) {
     this.setState({loading: true})
-    this.state.tracking.methods.startTransaction(_numberVaccine, _amountVaccine).send({ from: this.state.account})
+    this.state.tracking.methods.startTransaction(_numberVaccine, _amountVaccine).send({from: this.state.account})
     .once('receipt', (receipt) => {
       this.setState({loading: true})
     })
@@ -150,7 +151,7 @@ class App extends Component {
 
   goTransfer(_numberVaccine, _amountVaccine) {
     this.setState({loading: true})
-    this.state.tracking.methods.goTransfer(_numberVaccine, _amountVaccine).send({ from: this.state.account})
+    this.state.tracking.methods.goTransfer(_numberVaccine, _amountVaccine).send({from: this.state.account})
     .once('receipt', (receipt) => {
       this.setState({loading: false})
     })
@@ -158,7 +159,7 @@ class App extends Component {
 
   finishTransaction(_numberVaccine, _amountVaccine) {
     this.setState({loading: true})
-    this.state.tracking.methods.finishTransaction(_numberVaccine, _amountVaccine).send({ from: this.state.account})
+    this.state.tracking.methods.finishTransaction(_numberVaccine, _amountVaccine).send({from: this.state.account})
     .once('receipt', (receipt) => {
       this.setState({loading: false})
     })
@@ -177,9 +178,20 @@ class App extends Component {
                 <main role="main" className="col-lg-12 d-flex text-center">
                   <Switch>
                     <Route exact path='/'>
-
-                      <h1>Home {this.state.username}</h1>
-                      
+                      <nav>
+                        <h1>Home {this.state.username}</h1>
+                        <br></br>
+                        <h1>Vaksinasi adalah pemberian Vaksin dalam rangka menimbulkan atau meningkatkan kekebalan seseorang secara aktif terhadap suatu penyakit, sehingga apabila suatu saat terpajan dengan penyakit tersebut tidak akan sakit atau hanya mengalami sakit ringan dan tidak menjadi sumber penularan.</h1>
+                        <br></br>
+                        <h1>Pelayanan vaksinasi COVID-19 dilaksanakan di Fasilitas Pelayanan Kesehatan milik Pemerintah Pusat, Pemerintah Daerah Provinsi, Pemerintah Daerah Kabupaten/Kota atau milik masyarakat/swasta yang memenuhi persyaratan, meliputi:</h1>
+                        <br></br>
+                        <h1 align="left">
+                          <li>Puskesmas, Puskesmas Pembantu</li>
+                          <li>Klinik</li>
+                          <li>Rumah Sakit dan/atau</li>
+                          <li>Unit Pelayanan Kesehatan di Kantor Kesehatan Pelabuhan (KKP)</li>
+                        </h1>
+                      </nav>
                     </Route>
                     <Route exact path='/user'>
                       {this.state.loading
@@ -253,7 +265,6 @@ class App extends Component {
                           : <Patient
                               transaction={this.state.transactions}
                               finishTransaction={this.finishTransaction}
-                              getUser={this.getUser}
                             />
                       }
                     </Route>
@@ -266,6 +277,7 @@ class App extends Component {
                           </div>
                           : <Alur 
                               transaction={this.state.transactions}
+                              // getName={this.getUser}
                             />
                       }
                     </Route>
