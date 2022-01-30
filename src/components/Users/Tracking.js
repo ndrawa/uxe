@@ -26,7 +26,6 @@ class Tracking extends Component {
   };
 
   render() {
-    // var moment = require('moment');
     const items = this.props.transaction
       .filter((data) => {
         if (this.state.result == null) return data;
@@ -75,7 +74,6 @@ class Tracking extends Component {
                     style={{ width: "300px" }}
                   />
                   <p>&nbsp;</p>
-                  {/* <p>{this.state.result}</p> */}
                 </div>
               );
             } else {

@@ -43,7 +43,6 @@ class Distributor extends Component {
                 onScan={this.handleScan}
                 style={{ width: "300px" }}
               />
-              {/* <p>{this.state.result}</p> */}
             </div>
 
             <input
@@ -69,10 +68,7 @@ class Distributor extends Component {
                       this._amountVaccine = input;
                     }}
                     placeholder="Amount Vaccine"
-                    // value={this.state.result}
-                    // disabled
                     required
-                    // hidden
                   />
                 );
               }

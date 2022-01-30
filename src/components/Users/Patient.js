@@ -105,7 +105,6 @@ class Patient extends Component {
                       onScan={this.handleScan}
                       style={{ width: "300px" }}
                     />
-                    {/* <p>{this.state.result}</p> */}
                   </div>
                 );
               }
@@ -142,30 +141,6 @@ class Patient extends Component {
                       Accept Vaccine
                     </button>
                   </>
-
-                  // <div>
-                  //   <p>&nbsp;</p>
-                  //   <div>
-                  //     <h1>Tracking</h1>
-                  //     <table className="table">
-                  //       <thead>
-                  //         <tr>
-                  //           {/* <th scope="col">#</th> */}
-                  //           <th scope="col">Time</th>
-                  //           {/* <th scope="col">No. Transaction</th> */}
-                  //           {/* <th scope="col">No. Batch</th> */}
-                  //           {/* <th scope="col">Total</th> */}
-                  //           <th scope="col">Receiver</th>
-                  //           {/* <th scope="col">Sender</th> */}
-                  //         </tr>
-                  //       </thead>
-                  //       <tbody id="trackingList">{items}</tbody>
-                  //     </table>
-                  //   </div>
-                  //   <button type="submit" className="btn btn-primary mt-4">
-                  //     Accept Vaccine
-                  //   </button>
-                  // </div>
                 );
               }
             })()}

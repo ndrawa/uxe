@@ -62,7 +62,6 @@ class Producer extends Component {
               placeholder="Total Vaccines"
               required
             />
-            {/* <div style={{ display: "flex", justifyContent: "center" }}> */}
             <h1 className="text-sm mb-1">QR Code</h1>
             <div className="flex px-6 py-6 justify-center border-2 bg-gray-200 border-gray-300 rounded-lg">
               {this.state.imageUrl ? (

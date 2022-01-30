@@ -10,7 +10,8 @@ import Distributor from "./Users/Distributor";
 import Doctor from "./Users/Doctor";
 import Patient from "./Users/Patient";
 import Alur from "./Users/Tracking";
-import Navbar2 from "./Navbar2";
+import Navbar from "./Navbar";
+import moment from "moment";
 
 class App extends Component {
   async componentWillMount() {
@@ -22,7 +23,6 @@ class App extends Component {
     if (window.ethereum) {
       window.web3 = new Web3(window.ethereum);
       await window.ethereum.enable();
-      // await window.ethereum.send('eth_requestAccounts')
     } else if (window.web3) {
       window.web3 = new Web3(window.web3.componentProvider);
     } else {
@@ -41,27 +41,14 @@ class App extends Component {
 
     if (networkData) {
       const tracking = web3.eth.Contract(Tracking.abi, networkData.address);
-      // console.log(tracking)
       this.setState({ tracking: tracking });
 
       const user = await tracking.methods.users(accounts[0]).call();
-      // console.log(user);
-      // console.log(
-      //   await tracking.methods
-      //     .users("0x5122872F957dE6980F75Ffe063DeCF56916A90f5")
-      //     .call()
-      // );
-      // await this.getUser("0x5122872F957dE6980F75Ffe063DeCF56916A90f5").then(
-      //   (response) => {
-      //     console.log(this.state);
-      //   }
-      // );
 
       this.setState({ role: user.role });
       this.setState({ username: user.name });
 
       const _Vaccine = await tracking.methods._Vaccine().call();
-      // console.log(_Vaccine.toString())
       this.setState({ _Vaccine });
       for (var index = 0; index < _Vaccine; index++) {
         const vaccine = await tracking.methods.vaccines(index).call();
@@ -70,10 +57,8 @@ class App extends Component {
         });
       }
       this.setState({ loading: false });
-      // console.log(this.state.vaccines)
 
       const _Transaction = await tracking.methods._Transaction().call();
-      // console.log(_Transaction.toString())
       this.setState({ _Transaction });
       for (var i = 1; i <= _Transaction; i++) {
         const transaction = await tracking.methods.transactions(i).call();
@@ -82,12 +67,9 @@ class App extends Component {
         });
       }
       this.setState({ loading: false });
-      console.log(this.state.transactions);
     } else {
       window.alert("Tracking contract not deployed to detected network");
     }
-
-    // console.log(Tracking.abi)
   }
 
   constructor(props) {
@@ -105,24 +87,14 @@ class App extends Component {
       transactions: [],
       vaccines: [],
       loading: true,
+      covid: "",
     };
     this.addUser = this.addUser.bind(this);
     this.addVaccine = this.addVaccine.bind(this);
     this.startTransaction = this.startTransaction.bind(this);
     this.goTransfer = this.goTransfer.bind(this);
     this.finishTransaction = this.finishTransaction.bind(this);
-    // this.getUser = this.getUser.bind(this)
-    // this.getName = this.getName.bind(this)
   }
-
-  // getUser(_address) {
-  //   this.state.tracking.methods.users(_address).call().then((user) => {
-  //     return user.name+'hello'
-  //     // console.log(this.state.user+'hello');
-  //   }).catch((error) => {
-  //     return error
-  //   });
-  // }
 
   addUser(_user, _userName, _userRole) {
     this.setState({ loading: true });
@@ -174,25 +146,18 @@ class App extends Component {
       });
   }
 
-  // componentDidMount() {
-  //   this.timerHandle = setTimeout(
-  //     () => this.setState({ loading: false }),
-  //     3500
-  //   );
-  // }
-
-  // componentWillUnmount() {
-  //   if (this.timerHandle) {
-  //     clearTimeout(this.timerHandle);
-  //     this.timerHandle = 0;
-  //   }
-  // }
+  componentDidMount() {
+    fetch("https://disease.sh/v3/covid-19/countries/360")
+      .then((resp) => resp.json())
+      // .then((resp) => console.log(resp))
+      .then((resp) => this.setState({ covid: resp }));
+  }
 
   render() {
     return (
       <div>
         <Router>
-          <Navbar2 role={this.state.role} />
+          <Navbar role={this.state.role} />
           <Switch>
             <Route exact path="/">
               <div className="h-screen">
@@ -206,8 +171,16 @@ class App extends Component {
                 <div className="px-4 mt-4">
                   <div className="bg-blue-400 text-white px-3 py-4 rounded-lg">
                     <h1 className="text-md font-bold">Corona Virus Cases:</h1>
-                    <p className="text-2xl font-sans font-bold">2.911.733</p>
-                    <p className="mt-2 text-xs">Last Synced 19 July 2021</p>
+                    <p className="text-2xl font-sans font-bold">
+                      {this.state.covid.cases}
+                    </p>
+                    <p className="mt-2 text-xs">Last Synced: </p>
+                    <p className="mt-2 text-xs">
+                      {moment
+                        .unix(this.state.covid.updated / 1000)
+                        .locale("gmt")
+                        .format("dddd, MMMM D YYYY, h:mm a")}
+                    </p>
                   </div>
                 </div>
 
@@ -215,7 +188,7 @@ class App extends Component {
                 <div className="px-4 mt-4">
                   <div className="bg-green-400 text-white px-3 py-4 rounded-lg">
                     <h1 className="font-semibold text-md">Recovered:</h1>
-                    <p className="text-md">2.293.875</p>
+                    <p className="text-md"> {this.state.covid.recovered}</p>
                   </div>
                 </div>
               </div>
@@ -295,10 +268,7 @@ class App extends Component {
                   <p className="text-center">Loading...</p>
                 </div>
               ) : (
-                <Alur
-                  transaction={this.state.transactions}
-                  // getName={this.getUser}
-                />
+                <Alur transaction={this.state.transactions} />
               )}
             </Route>
           </Switch>
