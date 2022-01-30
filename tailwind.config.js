@@ -1,15 +1,11 @@
 module.exports = {
-  purge: [],
   darkMode: false, // or 'media' or 'class'
+  content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
-    extend: {
-      backgroundColor:{
-        'black-t-50' : 'rgba(0,0,0,0.5)',
-      }
-    },
+    extend: {},
   },
   variants: {
     extend: {},
   },
   plugins: [],
-}
+};

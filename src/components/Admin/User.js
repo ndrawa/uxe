@@ -1,57 +1,116 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 class User extends Component {
-
   render() {
     return (
-      <div id="content">
-        <h1>Add User</h1>
-        <form onSubmit={(event) => {
-          event.preventDefault()
-          const _user = this._user.value
-          const _userName = this._userName.value
-          const _userRole = this._userRole.value
-          this.props.addUser(_user,_userName,_userRole)
-        }}>
-          <div className="form-group mr-sm-2 mt-4">
-            <input
+      <div className="h-screen">
+        <div className="px-4 mb-2.5 pt-3">
+          <h1 className="text-xl font-semibold">Tambah User</h1>
+        </div>
+        <hr className="bg-gray-500" />
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            const _user = this._user.value;
+            const _userName = this._userName.value;
+            const _userRole = this._userRole.value;
+            this.props.addUser(_user, _userName, _userRole);
+          }}
+          className="mt-4 flex flex-col px-12"
+        >
+          <p>Address</p>
+          <input
             id="userAddress"
             type="password"
-            ref={(input) => {this._user = input}}
-            className="form-control"
+            ref={(input) => {
+              this._user = input;
+            }}
             placeholder="Address"
-            required/>
-          </div>
-
-          <div className="form-group mr-sm-2 mt-3">
-            <input
+            required
+            className="mt-1 p-2.5 mb-6 border-2 border-gray-300 rounded-lg"
+          />
+          <p>Nama</p>
+          <input
             id="userName"
             type="text"
-            ref={(input) => {this._userName = input}}
-            className="form-control"
+            ref={(input) => {
+              this._userName = input;
+            }}
             placeholder="Name"
-            required/>
-          </div>
-
-          <div className="form-group mr-sm-2 mt-3">
-            {/* <input
+            required
+            className="p-2.5 mb-6 border-2 border-gray-300 rounded-lg"
+          />
+          <p>Role</p>
+          <select
+            name="selectList"
             id="userRole"
-            ref={(input) => {this._userRole = input}}
+            ref={(input) => {
+              this._userRole = input;
+            }}
             type="number"
-            className="form-control"
-            placeholder="uint"
-            required/> */}
-            <select name="selectList" id="userRole" ref={(input) => {this._userRole = input}}>
-              <option value="1">Producer</option>
-              <option value="2">Distributor</option>
-              <option value="3">Doctor</option>
-              <option value="4">Patient</option>
-            </select>
-          </div>
-          <button type="submit" className="btn btn-primary mt-4">Add User</button>
+            className="bg-white mt-1 p-2.5 mb-6 border-2 border-gray-300 rounded-lg"
+          >
+            <option value="1">Producer</option> 
+            <option value="2">Distributor</option> 
+            <option value="3">Doctor</option> <option value="4">Patient</option>
+          </select>
+          <button
+            type="submit"
+            className="bg-blue-500 p-2 mt-3 inline-flex rounded-lg transition duration-300 hover:bg-opacity-90 text-white font-sans justify-center"
+          >
+            Simpan
+          </button>
         </form>
-        <p>&nbsp;</p>
       </div>
+
+      // <div id="content">
+      //   <h1>Add User</h1>
+      //   <form onSubmit={(event) => {
+      //     event.preventDefault()
+      //     const _user = this._user.value
+      //     const _userName = this._userName.value
+      //     const _userRole = this._userRole.value
+      //     this.props.addUser(_user,_userName,_userRole)
+      //   }}>
+      //     <div className="form-group mr-sm-2 mt-4">
+      //       <input
+      //       id="userAddress"
+      //       type="password"
+      //       ref={(input) => {this._user = input}}
+      //       className="form-control"
+      //       placeholder="Address"
+      //       required/>
+      //     </div>
+
+      //     <div className="form-group mr-sm-2 mt-3">
+      //       <input
+      //       id="userName"
+      //       type="text"
+      //       ref={(input) => {this._userName = input}}
+      //       className="form-control"
+      //       placeholder="Name"
+      //       required/>
+      //     </div>
+
+      //     <div className="form-group mr-sm-2 mt-3">
+      //       {/* <input
+      //       id="userRole"
+      //       ref={(input) => {this._userRole = input}}
+      //       type="number"
+      //       className="form-control"
+      //       placeholder="uint"
+      //       required/> */}
+      //       <select name="selectList" id="userRole" ref={(input) => {this._userRole = input}}>
+      //         <option value="1">Producer</option>
+      //         <option value="2">Distributor</option>
+      //         <option value="3">Doctor</option>
+      //         <option value="4">Patient</option>
+      //       </select>
+      //     </div>
+      //     <button type="submit" className="btn btn-primary mt-4">Add User</button>
+      //   </form>
+      //   <p>&nbsp;</p>
+      // </div>
     );
   }
 }
