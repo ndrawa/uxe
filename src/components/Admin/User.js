@@ -52,7 +52,8 @@ class User extends Component {
           >
             <option value="1">Producer</option> 
             <option value="2">Distributor</option> 
-            <option value="3">Doctor</option> <option value="4">Patient</option>
+            <option value="3">Vaccinator</option> 
+            <option value="4">Patient</option>
           </select>
           <button
             type="submit"
