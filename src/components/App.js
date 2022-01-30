@@ -1,11 +1,311 @@
-import React, { Component } from 'react';
-import logo from '../logo.png';
-import './App.css';
+import React, { Component } from "react";
+import Web3 from "web3";
+import "./App.css";
+import Tracking from "../abis/Tracking.json";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import User from "./Admin/User";
+import Vaccine from "./Admin/Vaccine";
+import Producer from "./Users/Producer";
+import Distributor from "./Users/Distributor";
+import Doctor from "./Users/Doctor";
+import Patient from "./Users/Patient";
+import Alur from "./Users/Tracking";
+import Navbar2 from "./Navbar2";
 
 class App extends Component {
+  async componentWillMount() {
+    await this.loadWeb3();
+    await this.loadBlockchainData();
+  }
+
+  async loadWeb3() {
+    if (window.ethereum) {
+      window.web3 = new Web3(window.ethereum);
+      await window.ethereum.enable();
+      // await window.ethereum.send('eth_requestAccounts')
+    } else if (window.web3) {
+      window.web3 = new Web3(window.web3.componentProvider);
+    } else {
+      window.alert(
+        "Non-Ethereum browser detected. You should consider trying MetaMask!"
+      );
+    }
+  }
+
+  async loadBlockchainData() {
+    const web3 = window.web3;
+    const accounts = await web3.eth.getAccounts();
+    this.setState({ account: accounts[0] });
+    const networkId = await web3.eth.net.getId();
+    const networkData = Tracking.networks[networkId];
+
+    if (networkData) {
+      const tracking = web3.eth.Contract(Tracking.abi, networkData.address);
+      // console.log(tracking)
+      this.setState({ tracking: tracking });
+
+      const user = await tracking.methods.users(accounts[0]).call();
+      // console.log(user);
+      // console.log(
+      //   await tracking.methods
+      //     .users("0x5122872F957dE6980F75Ffe063DeCF56916A90f5")
+      //     .call()
+      // );
+      // await this.getUser("0x5122872F957dE6980F75Ffe063DeCF56916A90f5").then(
+      //   (response) => {
+      //     console.log(this.state);
+      //   }
+      // );
+
+      this.setState({ role: user.role });
+      this.setState({ username: user.name });
+
+      const _Vaccine = await tracking.methods._Vaccine().call();
+      // console.log(_Vaccine.toString())
+      this.setState({ _Vaccine });
+      for (var index = 0; index < _Vaccine; index++) {
+        const vaccine = await tracking.methods.vaccines(index).call();
+        this.setState({
+          vaccines: [...this.state.vaccines, vaccine],
+        });
+      }
+      this.setState({ loading: false });
+      // console.log(this.state.vaccines)
+
+      const _Transaction = await tracking.methods._Transaction().call();
+      // console.log(_Transaction.toString())
+      this.setState({ _Transaction });
+      for (var i = 1; i <= _Transaction; i++) {
+        const transaction = await tracking.methods.transactions(i).call();
+        this.setState({
+          transactions: [...this.state.transactions, transaction],
+        });
+      }
+      this.setState({ loading: false });
+      console.log(this.state.transactions);
+    } else {
+      window.alert("Tracking contract not deployed to detected network");
+    }
+
+    // console.log(Tracking.abi)
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      tracking: "",
+      account: "",
+      role: "",
+      username: null,
+      _Transaction: 0,
+      _Vaccine: 0,
+      _numberTransaction: 0,
+      users: [],
+      user: "",
+      transactions: [],
+      vaccines: [],
+      loading: true,
+    };
+    this.addUser = this.addUser.bind(this);
+    this.addVaccine = this.addVaccine.bind(this);
+    this.startTransaction = this.startTransaction.bind(this);
+    this.goTransfer = this.goTransfer.bind(this);
+    this.finishTransaction = this.finishTransaction.bind(this);
+    // this.getUser = this.getUser.bind(this)
+    // this.getName = this.getName.bind(this)
+  }
+
+  // getUser(_address) {
+  //   this.state.tracking.methods.users(_address).call().then((user) => {
+  //     return user.name+'hello'
+  //     // console.log(this.state.user+'hello');
+  //   }).catch((error) => {
+  //     return error
+  //   });
+  // }
+
+  addUser(_user, _userName, _userRole) {
+    this.setState({ loading: true });
+    this.state.tracking.methods
+      .addUser(_user, _userName, _userRole)
+      .send({ from: this.state.account })
+      .once("receipt", (receipt) => {
+        this.setState({ loading: false });
+      });
+  }
+
+  addVaccine(_number, _name, _immune) {
+    this.setState({ loading: true });
+    this.state.tracking.methods
+      .addVaccine(_number, _name, _immune)
+      .send({ from: this.state.account })
+      .once("receipt", (receipt) => {
+        this.setState({ loading: false });
+      });
+  }
+
+  startTransaction(_numberVaccine, _amountVaccine) {
+    this.setState({ loading: true });
+    this.state.tracking.methods
+      .startTransaction(_numberVaccine, _amountVaccine)
+      .send({ from: this.state.account })
+      .once("receipt", (receipt) => {
+        this.setState({ loading: true });
+      });
+  }
+
+  goTransfer(_numberVaccine, _amountVaccine) {
+    this.setState({ loading: true });
+    this.state.tracking.methods
+      .goTransfer(_numberVaccine, _amountVaccine)
+      .send({ from: this.state.account })
+      .once("receipt", (receipt) => {
+        this.setState({ loading: false });
+      });
+  }
+
+  finishTransaction(_numberVaccine, _amountVaccine) {
+    this.setState({ loading: true });
+    this.state.tracking.methods
+      .finishTransaction(_numberVaccine, _amountVaccine)
+      .send({ from: this.state.account })
+      .once("receipt", (receipt) => {
+        this.setState({ loading: false });
+      });
+  }
+
+  // componentDidMount() {
+  //   this.timerHandle = setTimeout(
+  //     () => this.setState({ loading: false }),
+  //     3500
+  //   );
+  // }
+
+  // componentWillUnmount() {
+  //   if (this.timerHandle) {
+  //     clearTimeout(this.timerHandle);
+  //     this.timerHandle = 0;
+  //   }
+  // }
+
   render() {
     return (
-      "Hello"
+      <div>
+        <Router>
+          <Navbar2 role={this.state.role} />
+          <Switch>
+            <Route exact path="/">
+              <div className="h-screen">
+                <div className="px-4 pt-3 mb-2.5">
+                  <h1 className="text-xl font-semibold">
+                    Hello {this.state.username}
+                  </h1>
+                </div>
+                <hr className="bg-gray-500" />
+                {/* Widget */}
+                <div className="px-4 mt-4">
+                  <div className="bg-blue-400 text-white px-3 py-4 rounded-lg">
+                    <h1 className="text-md font-bold">Corona Virus Cases:</h1>
+                    <p className="text-2xl font-sans font-bold">2.911.733</p>
+                    <p className="mt-2 text-xs">Last Synced 19 July 2021</p>
+                  </div>
+                </div>
+
+                {/* Widget 2 */}
+                <div className="px-4 mt-4">
+                  <div className="bg-green-400 text-white px-3 py-4 rounded-lg">
+                    <h1 className="font-semibold text-md">Recovered:</h1>
+                    <p className="text-md">2.293.875</p>
+                  </div>
+                </div>
+              </div>
+            </Route>
+            <Route exact path="/user">
+              {this.state.loading ? (
+                <div id="loader" className="text-center">
+                  <p className="text-center">Loading...</p>
+                </div>
+              ) : (
+                <User addUser={this.addUser} />
+              )}
+            </Route>
+            <Route exact path="/vaccine">
+              {this.state.loading ? (
+                <div id="loader" className="text-center">
+                  <p className="text-center">Loading...</p>
+                </div>
+              ) : (
+                <Vaccine
+                  vaccines={this.state.vaccines}
+                  addVaccine={this.addVaccine}
+                />
+              )}
+            </Route>
+            <Route exact path="/producer">
+              {this.state.loading ? (
+                <div id="loader" className="text-center">
+                  <p className="text-center">Loading...</p>
+                </div>
+              ) : (
+                <Producer
+                  transaction={this.state.transactions}
+                  startTransaction={this.startTransaction}
+                />
+              )}
+            </Route>
+            <Route exact path="/distributor">
+              {this.state.loading ? (
+                <div id="loader" className="text-center">
+                  <p className="text-center">Loading...</p>
+                </div>
+              ) : (
+                <Distributor
+                  transaction={this.state.transactions}
+                  goTransfer={this.goTransfer}
+                />
+              )}
+            </Route>
+            <Route exact path="/doctor">
+              {this.state.loading ? (
+                <div id="loader" className="text-center">
+                  <p className="text-center">Loading...</p>
+                </div>
+              ) : (
+                <Doctor
+                  transaction={this.state.transactions}
+                  goTransfer={this.goTransfer}
+                />
+              )}
+            </Route>
+            <Route exact path="/patient">
+              {this.state.loading ? (
+                <div id="loader" className="text-center">
+                  <p className="text-center">Loading...</p>
+                </div>
+              ) : (
+                <Patient
+                  transaction={this.state.transactions}
+                  finishTransaction={this.finishTransaction}
+                />
+              )}
+            </Route>
+            <Route exact path="/tracking">
+              {this.state.loading ? (
+                <div id="loader" className="text-center">
+                  <p className="text-center">Loading...</p>
+                </div>
+              ) : (
+                <Alur
+                  transaction={this.state.transactions}
+                  // getName={this.getUser}
+                />
+              )}
+            </Route>
+          </Switch>
+
+          {/* <Footer/> */}
+        </Router>
+      </div>
     );
   }
 }
