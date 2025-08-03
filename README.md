@@ -4,9 +4,6 @@
 
 Proyek ini adalah **sistem pelacakan berbasis blockchain** untuk distribusi vaksin. Sistem ini bertujuan untuk meminimalkan masalah seperti pemalsuan vaksin dan distribusi ilegal dengan menggunakan teknologi **blockchain** untuk keamanan data dan **QR Code** untuk identifikasi unik.
 
-![Vaccine Distribution](https://via.placeholder.com/800x300?text=Blockchain+Vaccine+Distribution)  
-*Ilustrasi Distribusi Vaksin Berbasis Blockchain*
-
 ---
 
 ## ✨ Fitur Utama
