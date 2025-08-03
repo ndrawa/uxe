@@ -77,7 +77,7 @@ Pastikan Anda telah menginstal:
 ---
 
 ## 📧 Kontak
-Untuk pertanyaan lebih lanjut, hubungi kami di:  
+Untuk pertanyaan lebih lanjut, hubungi di:  
 **Email**: [indrawahyudi2710@gmail.com](mailto:indrawahyudi2710@gmail.com)
 
 ---
